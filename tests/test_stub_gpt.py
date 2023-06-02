@@ -19,7 +19,7 @@ class Game:
         parts = content.replace("```", "`").split("`")
         board = parts[1].strip().replace("\n---------\n", " | ").replace(" ", "")
         board = board.split("|")
-        return board
+        return [board]
 
     def start(self, player_first):
         if player_first:
@@ -60,9 +60,34 @@ def test_parse_initial_response_when_we_go_first():
         "usage": {"completion_tokens": 65, "prompt_tokens": 76, "total_tokens": 141},
     }
 
-    board = Game(None).extract_board(new_game_response)
+    boards = Game(None).extract_board(new_game_response)
 
-    assert board == ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    assert boards[0] == ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+
+def test_parse_initial_response_when_bot_goes_first():
+    new_game_response = {
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "index": 0,
+                "message": {
+                    "content": "Sure thing! \n\nHere's the initial board:\n\n```\n1 | 2 | 3  \n---------\n4 | 5 | 6 \n---------\n7 | 8 | 9\n```\n\nI'll start by placing an X in the center of the board (position 5):\n\n```\n1 | 2 | 3  \n---------\n4 | X | 6 \n---------\n7 | 8 | 9\n```\n\nYour turn, where would you like to put your O?",
+                    "role": "assistant",
+                },
+            }
+        ],
+        "created": 1685704217,
+        "id": "chatcmpl-7MwxdUK2s5EmQ1uS86YlqI0kLE9vU",
+        "model": "gpt-3.5-turbo-0301",
+        "object": "chat.completion",
+        "usage": {"completion_tokens": 99, "prompt_tokens": 76, "total_tokens": 175},
+    }
+
+    boards = Game(None).extract_board(new_game_response)
+
+    assert boards[0] == ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    assert boards[1] == ["1", "2", "3", "4", "X", "6", "7", "8", "9"]
 
 
 #
