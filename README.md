@@ -8,3 +8,4 @@
 - integrated tests
 - smoke tests
 - why mock.patch should be avoid where possible
+- paranoic telemetry and nullables
