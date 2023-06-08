@@ -17,9 +17,16 @@ class Game:
     def extract_board(self, response):
         content = response["choices"][0]["message"]["content"].strip()
         parts = content.replace("```", "`").split("`")
+        result = []
         board = parts[1].strip().replace("\n---------\n", " | ").replace(" ", "")
         board = board.split("|")
-        return [board]
+        result.append(board)
+        if len(parts) > 3:
+            board = parts[3].strip().replace("\n---------\n", " | ").replace(
+                " ", "")
+            board = board.split("|")
+            result.append(board)
+        return result
 
     def start(self, player_first):
         if player_first:
