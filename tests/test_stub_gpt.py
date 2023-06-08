@@ -14,19 +14,15 @@ class Game:
     def __init__(self, client):
         self._client = client
 
+    def _extract_squares(self, part):
+        board = part.strip().replace("\n---------\n", " | ").replace(" ", "")
+        return board.split("|")
+
     def extract_board(self, response):
         content = response["choices"][0]["message"]["content"].strip()
         parts = content.replace("```", "`").split("`")
-        result = []
-        board = parts[1].strip().replace("\n---------\n", " | ").replace(" ", "")
-        board = board.split("|")
-        result.append(board)
-        if len(parts) > 3:
-            board = parts[3].strip().replace("\n---------\n", " | ").replace(
-                " ", "")
-            board = board.split("|")
-            result.append(board)
-        return result
+        return [self._extract_squares(part)
+                for idx, part in enumerate(parts) if idx % 2 == 1]
 
     def start(self, player_first):
         if player_first:
