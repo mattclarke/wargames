@@ -119,4 +119,7 @@ def test_that_game_is_finished_after_all_square_are_taken():
     assert board.is_finished()
     assert not board.is_win()
 
+def test_correct_player_won_the_game():
+    assert False
+
 
