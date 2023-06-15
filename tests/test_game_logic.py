@@ -58,3 +58,65 @@ def test_not_allowed_move_outside_of_board():
         board.make_move(-1)
 
 
+def test_that_three_in_a_row_is_win():
+    board = Board()
+    board.make_move(0)
+    board.make_move(3)
+    board.make_move(1)
+    board.make_move(4)
+    board.make_move(2)
+    assert board.is_win()
+
+
+def test_that_game_not_finished():
+    board = Board()
+    board.make_move(0)
+    board.make_move(3)
+    board.make_move(1)
+    board.make_move(4)
+    assert not board.is_win()
+
+
+def test_that_three_in_a_col_is_win():
+    board = Board()
+    board.make_move(2)
+    board.make_move(4)
+    board.make_move(5)
+    board.make_move(6)
+    board.make_move(8)
+    assert board.is_win()
+
+
+def test_that_three_in_a_diag_is_win():
+    board = Board()
+    board.make_move(2)
+    board.make_move(0)
+    board.make_move(4)
+    board.make_move(8)
+    board.make_move(6)
+    assert board.is_win()
+
+def test_that_game_is_finished_after_winning():
+    board = Board()
+    board.make_move(2)
+    board.make_move(0)
+    board.make_move(4)
+    board.make_move(8)
+    board.make_move(6)
+    assert board.is_finished()
+
+def test_that_game_is_finished_after_all_square_are_taken():
+    board = Board()
+    board.make_move(0)
+    board.make_move(4)
+    board.make_move(2)
+    board.make_move(1)
+    board.make_move(7)
+    board.make_move(6)
+    board.make_move(5)
+    board.make_move(8)
+    board.make_move(3)
+    assert board.is_finished()
+    assert not board.is_win()
+
+

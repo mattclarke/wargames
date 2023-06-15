@@ -27,3 +27,18 @@ class Board:
 
         self.board[position] = self.current_player
         self.current_player = SquareState.X if self.current_player == SquareState.O else SquareState.O
+
+    def is_win(self):
+        winning_combos = [
+            (0, 1, 2), (3, 4, 5), (6, 7, 8),
+            (0, 3, 6), (1, 4, 7), (2, 5, 8),
+            (0, 4, 8), (2, 4, 6),
+        ]
+
+        return any([self.board[a] == self.board[b] == self.board[c] for a, b, c in winning_combos if self.board[a] != SquareState.EMPTY])
+
+    def get_available_moves(self):
+        return [i for i, square in enumerate(self.board) if square == SquareState.EMPTY]
+
+    def is_finished(self):
+        return self.is_win() or len(self.get_available_moves()) == 0
