@@ -7,6 +7,13 @@ class SquareState(Enum):
     O = 2
 
 
+class Result(Enum):
+    NOT_FINISHED = 0
+    DRAW = 1
+    X = 2
+    O = 3
+
+
 class InvalidMoveException(Exception):
     pass
 
@@ -28,7 +35,7 @@ class Board:
         self.board[position] = self.current_player
         self.current_player = SquareState.X if self.current_player == SquareState.O else SquareState.O
 
-    def is_win(self):
+    def _is_win(self):
         winning_combos = [
             (0, 1, 2), (3, 4, 5), (6, 7, 8),
             (0, 3, 6), (1, 4, 7), (2, 5, 8),
@@ -40,5 +47,10 @@ class Board:
     def get_available_moves(self):
         return [i for i, square in enumerate(self.board) if square == SquareState.EMPTY]
 
-    def is_finished(self):
-        return self.is_win() or len(self.get_available_moves()) == 0
+    def get_result(self):
+        if self._is_win():
+            return Result.X if self.current_player == SquareState.O else Result.O
+        elif len(self.get_available_moves()) == 0:
+            return Result.DRAW
+        else:
+            return Result.NOT_FINISHED
