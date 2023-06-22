@@ -29,22 +29,23 @@ class InvalidMoveException(Exception):
     pass
 
 
-class Board:
+class Game:
     def __init__(self):
-        self.board = [SquareState.EMPTY] * 9
+        self._board = [SquareState.EMPTY] * 9
         self.current_player = SquareState.O
 
-    def is_empty(self):
-        return all([square == SquareState.EMPTY for square in self.board])
+    @property
+    def board(self):
+        return list(self._board)
 
     def make_move(self, position):
         if position < 0 or position > 8:
             raise InvalidMoveException("Position is outside of board")
 
-        if self.board[position] != SquareState.EMPTY:
+        if self._board[position] != SquareState.EMPTY:
             raise InvalidMoveException("Square is already taken")
 
-        self.board[position] = self.current_player
+        self._board[position] = self.current_player
         self.current_player = (
             SquareState.X if self.current_player == SquareState.O else SquareState.O
         )
@@ -52,14 +53,14 @@ class Board:
     def _is_win(self):
         return any(
             [
-                self.board[a] == self.board[b] == self.board[c]
+                self._board[a] == self._board[b] == self._board[c]
                 for a, b, c in WINNING_COMBOS
-                if self.board[a] != SquareState.EMPTY
+                if self._board[a] != SquareState.EMPTY
             ]
         )
 
     def get_available_moves(self):
-        return [i for i, square in enumerate(self.board) if square == SquareState.EMPTY]
+        return [i for i, square in enumerate(self._board) if square == SquareState.EMPTY]
 
     def get_result(self):
         if self._is_win():
